@@ -1,0 +1,28 @@
+Dear Hiring / Security Team at {company},
+
+Hello, my name is {sender_name}. I am writing to apply for a {position} engagement at {company}.
+
+Please note upfront: I am currently a Grade 12 high school student, graduating in 2027. Because of that I can only work in a freelance, remote, or part-time capacity — I am not available for a full-time on-site position. All of my work is done outside school hours and fully remotely.
+
+What I can do for {company}:
+- Web application penetration testing (OWASP Top 10), API and authentication testing, and coordinated vulnerability disclosure
+- Bug bounty hunting for clients in Indonesia and overseas
+- Clear, reproducible reports: proof of concept, impact, and remediation advice
+
+Recognition:
+- Hall of Fame / Letters of Appreciation: NASA (VDP), CERT-EU, Drexel University, Nokia, Bayer, Komdigi (Top 7 Bug Hunter), BMKG CSIRT
+- Freelance Cyber Security Researcher, PT. Doran Sukses Indonesia (remote, part-time)
+- Freelance Bug Hunter, Ruangguru (remote)
+- Gold Medalist, OSN Informatika; Top 7, BakaCTF 2026
+
+I am happy to start with a small project or a pilot audit so your team can judge the quality of my work before any longer commitment.
+
+My CV is attached. Thank you for your time.
+
+Best regards,
+{sender_name}
+{sender_email} | {sender_phone}
+LinkedIn: {sender_linkedin}
+
+--
+If this is not relevant to you, reply STOP and I will not contact you again.

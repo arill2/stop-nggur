@@ -1,0 +1,28 @@
+# --- secrets ---
+.env
+.env.*
+!.env.example
+
+# --- local state / PII (never commit) ---
+data/*
+!data/.gitkeep
+*.log
+logs/
+sent_log.csv
+suppression.txt
+queue.json
+targets*.csv
+
+# --- python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# --- editor / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

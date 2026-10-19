@@ -1,0 +1,28 @@
+Kepada Yth. Tim Rekrutmen / HRD {company},
+
+Halo, saya {sender_name}. Saya ingin mengajukan diri untuk posisi {position} di {company}.
+
+Saya sampaikan terus terang di awal: saat ini saya masih siswa kelas 12 SMA (lulus 2027). Karena itu saya hanya dapat bekerja secara freelance, remote, atau part-time — saya tidak dapat mengambil posisi full-time di kantor. Semua pengerjaan saya lakukan di luar jam sekolah dan sepenuhnya jarak jauh.
+
+Yang bisa saya bantu untuk {company}:
+- Pengujian penetrasi aplikasi web (OWASP Top 10), pengujian API dan autentikasi, serta coordinated vulnerability disclosure
+- Bug bounty untuk klien dalam maupun luar negeri
+- Laporan yang jelas dan reproducible: proof of concept, dampak, dan saran perbaikan
+
+Rekognisi:
+- Hall of Fame / Letter of Appreciation: NASA (VDP), CERT-EU, Drexel University, Nokia, Bayer, Komdigi (Top 7 Bug Hunter), BMKG CSIRT
+- Freelance Cyber Security Researcher, PT. Doran Sukses Indonesia (remote, part-time)
+- Freelance Bug Hunter, Ruangguru (remote)
+- Medali Emas OSN Informatika; Top 7 BakaCTF 2026
+
+Saya siap memulai dengan proyek kecil atau audit percobaan agar tim dapat menilai hasil kerja saya sebelum komitmen yang lebih panjang.
+
+CV saya terlampir. Terima kasih atas waktu dan pertimbangannya.
+
+Hormat saya,
+{sender_name}
+{sender_email} | {sender_phone}
+LinkedIn: {sender_linkedin}
+
+--
+Apabila tidak relevan, cukup balas STOP dan saya tidak akan menghubungi lagi.
