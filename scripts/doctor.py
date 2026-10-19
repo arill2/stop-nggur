@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -51,17 +52,39 @@ def check_composio() -> dict:
     }
 
 
-def check_env() -> dict:
-    C.load_env()
-    name = C.env_or("SENDER_NAME")
-    email = C.env_or("SENDER_EMAIL")
-    ok = bool(name and email)
-    missing = [k for k, v in (("SENDER_NAME", name), ("SENDER_EMAIL", email)) if not v]
+def check_profile() -> dict:
+    path = C.DATA / "profile.md"
+    if not path.exists():
+        return {
+            "check": "profile",
+            "ok": False,
+            "detail": "data/profile.md missing",
+            "fix": "cp profile.example.md data/profile.md && fill it in (data/ is gitignored)",
+        }
+    text = path.read_text()
+    missing = [k for k in ("name:", "email:") if k not in text]
     return {
-        "check": "identity_env",
-        "ok": ok,
-        "detail": f"{name} <{email}>" if ok else f"missing: {', '.join(missing)}",
-        "fix": "" if ok else "cp .env.example .env && edit SENDER_NAME / SENDER_EMAIL",
+        "check": "profile",
+        "ok": not missing,
+        "detail": "ok" if not missing else f"missing fields: {', '.join(missing)}",
+        "fix": "" if not missing else f"add {', '.join(missing)} to data/profile.md",
+    }
+
+
+def check_templates_clean() -> dict:
+    """Templates ship in a public repo — they must contain no identity data."""
+    dirty = []
+    for path in (C.TEMPLATES).glob("*.txt"):
+        text = path.read_text()
+        if re.search(r"[\w.+-]+@[\w-]+\.[\w.]+", text):
+            dirty.append(f"{path.name}:email")
+        if re.search(r"\+?\d[\d\s-]{8,}\d", text):
+            dirty.append(f"{path.name}:phone")
+    return {
+        "check": "templates_clean",
+        "ok": not dirty,
+        "detail": "no identity data" if not dirty else "; ".join(dirty),
+        "fix": "" if not dirty else "templates must use placeholders, not real contact details",
     }
 
 
@@ -82,7 +105,6 @@ def check_gitignore() -> dict:
 
 def check_leaks() -> dict:
     """Fail if anything under version control looks like a credential."""
-    import re
     patterns = {
         "composio_key": re.compile(r"ck_[A-Za-z0-9]{10,}"),
         "openai_key": re.compile(r"sk-[A-Za-z0-9]{20,}"),
@@ -129,8 +151,8 @@ def check_state() -> dict:
     return {"check": "pipeline_state", "ok": True, "detail": counts, "fix": ""}
 
 
-CHECKS = [check_python, check_dnspython, check_composio, check_env,
-          check_gitignore, check_leaks, check_state]
+CHECKS = [check_python, check_dnspython, check_composio, check_profile,
+          check_templates_clean, check_gitignore, check_leaks, check_state]
 
 
 def main() -> None:

@@ -76,9 +76,11 @@ cd stop-nggur
 python3 -m venv .venv && source .venv/bin/activate
 pip install dnspython
 
-cp .env.example .env
-$EDITOR .env                     # your name, email, phone
+cp profile.example.md data/profile.md
+$EDITOR data/profile.md          # your name, email, phone, what you can do
 ```
+
+`data/` is gitignored, so your details never leave your machine.
 
 Check the machine before you run it:
 
@@ -90,7 +92,8 @@ python3 scripts/doctor.py
 [PASS] python_version   3.14
 [PASS] dnspython        installed
 [PASS] composio_cli     /usr/local/bin/composio
-[PASS] identity_env     Your Name <you@example.com>
+[PASS] profile          ok
+[PASS] templates_clean  no identity data
 [PASS] gitignore        ok
 [PASS] credential_leak  clean
 [PASS] pipeline_state   candidates=0, targets=0, queue=0, outbox=0, suppressed=0, sent_today=0
@@ -178,6 +181,43 @@ python3 scripts/doctor.py --json
 ```
 
 Point your agent at the directory and tell it to read `SKILL.md`. It will run preflight, follow `next` through the stages, and stop before sending to ask for approval.
+
+---
+
+## Templates ship empty, on purpose
+
+The templates in `templates/` contain **no personal data**. They are skeletons:
+
+```
+Dear Hiring / Security Team at {company},
+
+My name is {name}. I am writing to apply for a {position} engagement at {company}.
+
+{disclosure_line}
+
+What I can do for {company}:
+{capability_bullets}
+...
+```
+
+Your details live in `data/profile.md`, which is gitignored. `compose.py` merges
+the two. `doctor.py` fails the preflight if an email address or phone number ever
+appears inside `templates/`.
+
+That split exists because this repo is public. A template with a real name,
+school, and phone number is a doxxing artifact, and the first version of this
+project had exactly that.
+
+**The agent can also write each body itself.** That is the intended use — give it
+`data/profile.md` and the company, let it write. Bodies it writes go into
+`data/outbox.json` and get validated before sending:
+
+```bash
+python3 scripts/compose.py --from-outbox
+```
+
+Any body without an opt-out line fails the batch. Hand-written or templated, the
+opt-out rule does not bend.
 
 ---
 

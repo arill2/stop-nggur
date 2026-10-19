@@ -36,6 +36,26 @@ Read `ready` and `next`.
 `next` is one of `discover`, `verify`, `dedupe`, `compose`, `send`, derived from
 which `data/` files are empty. Trust it over your own reading of the filesystem.
 
+## Identity lives in data/profile.md
+
+Templates ship in a public repo, so they contain **no personal data** — only
+placeholders like `{name}`, `{company}`, `{disclosure_line}`.
+
+Your details live in `data/profile.md`, which is gitignored:
+
+```bash
+cp profile.example.md data/profile.md
+$EDITOR data/profile.md
+```
+
+`doctor.py` checks two things about this:
+
+- `profile` — the file exists and has `name:` / `email:`
+- `templates_clean` — no email address or phone number leaked into `templates/`
+
+If `templates_clean` fails, someone put real contact details in a template.
+Move them to the profile. Never commit them.
+
 ## Stages
 
 ### discover — find published addresses
@@ -86,17 +106,30 @@ This is the stage that makes duplicates impossible. It subtracts:
 Output `data/queue.json`. If the queue is empty, everything is already sent or
 suppressed. **That is correct behaviour, not a failure.** Report it and stop.
 
-### compose — render the emails
+### compose — write the emails
 
 ```bash
 python3 scripts/compose.py --template templates/en_penetration_tester.txt
 ```
 
-Injects `SENDER_*` from `.env` and `{company}` / `{position}` per recipient.
+Templates in `templates/` contain **no personal data** — only placeholders. Your
+identity lives in `data/profile.md`, which is gitignored. The script merges the
+two.
 
-Refuses to render a template with no opt-out line. Do not work around this with
-`--allow-no-optout` unless the user explicitly instructs it and understands that
-unsolicited mail without an opt-out is spam in most jurisdictions.
+You may write each body yourself instead of using the template — that is the
+point of shipping identity-free templates. If you do, write them into
+`data/outbox.json` and validate:
+
+```bash
+python3 scripts/compose.py --from-outbox
+```
+
+That checks every body for an opt-out line and fails the batch if any is
+missing. **Run it before sending.** A body you wrote by hand is still subject to
+the opt-out invariant.
+
+Both paths refuse to proceed if `data/profile.md` is missing or lacks `name:` /
+`email:`. Copy `profile.example.md` to `data/profile.md` and fill it in.
 
 Output `data/outbox.json`: `[{company,email,subject,body}]`
 

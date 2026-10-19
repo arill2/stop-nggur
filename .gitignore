@@ -6,6 +6,7 @@
 # --- local state / PII (never commit) ---
 data/*
 !data/.gitkeep
+profile.md
 *.log
 logs/
 sent_log.csv
